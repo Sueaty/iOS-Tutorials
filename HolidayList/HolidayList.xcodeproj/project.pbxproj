@@ -16,6 +16,7 @@
 		80D2B9B8255FE5F300707ECA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 80D2B9B6255FE5F300707ECA /* LaunchScreen.storyboard */; };
 		80D2B9C3255FE5F300707ECA /* HolidayListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D2B9C2255FE5F300707ECA /* HolidayListTests.swift */; };
 		80D2B9CE255FE5F300707ECA /* HolidayListUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D2B9CD255FE5F300707ECA /* HolidayListUITests.swift */; };
+		80D2B9E225605D8200707ECA /* HolidayCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 80D2B9E125605D8200707ECA /* HolidayCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		80D2B9C9255FE5F300707ECA /* HolidayListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HolidayListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		80D2B9CD255FE5F300707ECA /* HolidayListUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayListUITests.swift; sourceTree = "<group>"; };
 		80D2B9CF255FE5F300707ECA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		80D2B9E125605D8200707ECA /* HolidayCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HolidayCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 				80D2B9B6255FE5F300707ECA /* LaunchScreen.storyboard */,
 				80D2B9B9255FE5F300707ECA /* Info.plist */,
 				80D2B9B1255FE5F200707ECA /* HolidayList.xcdatamodeld */,
+				80D2B9E125605D8200707ECA /* HolidayCollectionViewCell.swift */,
 			);
 			path = HolidayList;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				80D2B9A9255FE5F200707ECA /* AppDelegate.swift in Sources */,
 				80D2B9B3255FE5F200707ECA /* HolidayList.xcdatamodeld in Sources */,
 				80D2B9AB255FE5F200707ECA /* SceneDelegate.swift in Sources */,
+				80D2B9E225605D8200707ECA /* HolidayCollectionViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

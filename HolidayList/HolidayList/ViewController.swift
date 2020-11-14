@@ -17,11 +17,14 @@ final class ViewController: UIViewController {
     var entity: NSEntityDescription!
     
     // MARK:- IBOutlets
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     // MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupOpenCollectionview()
+        title = "Holidays To Celebrate"
+        
         appDelegate = UIApplication.shared.delegate as? AppDelegate
         managedContext = appDelegate.persistentContainer.viewContext
         entity = NSEntityDescription.entity(forEntityName: "Holiday", in: managedContext)!
@@ -30,6 +33,13 @@ final class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         fetchFromDataModel()
+    }
+    
+    // MARK:- CollectionView Layout
+    private func setupOpenCollectionview() {
+        let config = UICollectionLayoutListConfiguration(appearance: .insetGrouped)
+        let layout = UICollectionViewCompositionalLayout.list(using: config)
+        collectionView.collectionViewLayout = layout
     }
 
     // MARK:- IBActions
@@ -46,7 +56,7 @@ final class ViewController: UIViewController {
                 guard let textField = addHolidayAlert.textFields?.first,
                       let dayToSave = textField.text else { return }
                 save(name: dayToSave)
-                tableView.reloadData()
+                collectionView.reloadData()
             })
         let cancelAction = UIAlertAction(
             title: "Cancel",
@@ -82,19 +92,22 @@ final class ViewController: UIViewController {
     
 }
 
-extension ViewController: UITableViewDataSource {
+extension ViewController: UICollectionViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return holidays.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let holiday = holidays[indexPath.row]
-        cell.textLabel?.text = holiday.value(forKeyPath: "name") as? String
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as? HolidayCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        let holiday = holidays[indexPath.item]
+        cell.titleLabel.text = holiday.value(forKeyPath: "name") as? String
         /// Why you need **as? String**
             /// NSManagedObject doesn’t know about the attributes and properties defined in the Data Model
         return cell
     }
 }
+
 
