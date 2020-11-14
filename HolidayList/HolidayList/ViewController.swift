@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
-class ViewController: UIViewController {
+final class ViewController: UIViewController {
 
     // MARK:- Properties
-    var names = [String]()
+    var holidays = [NSManagedObject]()
+    var managedContext: NSManagedObjectContext
+    var entity: NSEntityDescription
     
     // MARK:- IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -18,6 +21,9 @@ class ViewController: UIViewController {
     // MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        guard let appDeleate = UIApplication.shared.delegate as? AppDelegate else { return }
+        managedContext = appDeleate.persistentContainer.viewContext
+        entity = NSEntityDescription.entity(forEntityName: "Holiday", in: managedContext)!
         title = "Holiday List"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
@@ -35,7 +41,7 @@ class ViewController: UIViewController {
             handler: { [unowned self] action in
                 guard let textField = addHolidayAlert.textFields?.first,
                       let dayToSave = textField.text else { return }
-                names.append(dayToSave)
+                save(name: dayToSave)
                 tableView.reloadData()
             })
         let cancelAction = UIAlertAction(
@@ -48,18 +54,33 @@ class ViewController: UIViewController {
         addHolidayAlert.addAction(cancelAction)
         present(addHolidayAlert, animated: true)
     }
-
+    
+    // MARK:- CoreData related Functions
+    private func save(name: String) {
+        let holiday = NSManagedObject(entity: entity, insertInto: managedContext)
+        holiday.setValue(name, forKey: "name")
+        do {
+            try managedContext.save()
+            holidays.append(holiday)
+        } catch let error as NSError {
+            print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
 }
 
 extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return names.count
+        return holidays.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = names[indexPath.row]
+        let holiday = holidays[indexPath.row]
+        cell.textLabel?.text = holiday.value(forKeyPath: "name") as? String
+        /// Why you need **as? String**
+            /// NSManagedObject doesn’t know about the attributes and properties defined in the Data Model
         return cell
     }
 }
