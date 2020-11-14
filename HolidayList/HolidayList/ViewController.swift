@@ -12,8 +12,9 @@ final class ViewController: UIViewController {
 
     // MARK:- Properties
     var holidays = [NSManagedObject]()
-    var managedContext: NSManagedObjectContext
-    var entity: NSEntityDescription
+    var appDelegate: AppDelegate!
+    var managedContext: NSManagedObjectContext!
+    var entity: NSEntityDescription!
     
     // MARK:- IBOutlets
     @IBOutlet weak var tableView: UITableView!
@@ -21,11 +22,14 @@ final class ViewController: UIViewController {
     // MARK:- View LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        guard let appDeleate = UIApplication.shared.delegate as? AppDelegate else { return }
-        managedContext = appDeleate.persistentContainer.viewContext
+        appDelegate = UIApplication.shared.delegate as? AppDelegate
+        managedContext = appDelegate.persistentContainer.viewContext
         entity = NSEntityDescription.entity(forEntityName: "Holiday", in: managedContext)!
-        title = "Holiday List"
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        fetchFromDataModel()
     }
 
     // MARK:- IBActions
@@ -64,6 +68,15 @@ final class ViewController: UIViewController {
             holidays.append(holiday)
         } catch let error as NSError {
             print("Could not save. \(error), \(error.userInfo)")
+        }
+    }
+    
+    private func fetchFromDataModel() {
+        let fetchedRequest = NSFetchRequest<NSManagedObject>(entityName: "Holiday")
+        do {
+            holidays = try managedContext.fetch(fetchedRequest)
+        } catch let error as NSError {
+            print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
     
